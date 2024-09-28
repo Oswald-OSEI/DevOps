@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"         # Map port 8080 of the host to port 8080 of the container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db                  # Wait for the database container to be ready
+
+  db:
+    image: mysql:8.0         # Use the official MySQL image
+    ports:
+      - "3306:3306"          # Map port 3306 of the host to port 3306 of the container
+    environment:
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql  # Persist data in a volume
+
+volumes:
+  db_data:
