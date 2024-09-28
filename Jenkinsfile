@@ -13,7 +13,6 @@ pipeline {
             steps {
                 // Clone the repository from GitHub 
                git url: 'https://github.com/Oswald-OSEI/DevOps.git', branch: 'feature/002-Jenkins-CI-CD-with-Docker'
-
             }
         }
         stage('Build') {
