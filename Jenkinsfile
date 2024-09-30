@@ -1,28 +1,31 @@
 pipeline {
     agent any
-    tools {
-        maven 'maven' 
-    }
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Get code from GitHub repository
-               git branch: 'feature/002-Jenkins-CI-CD-with-Docker', url: 'https://github.com/Oswald-OSEI/DevOps'
-
+                 git branch: 'feature/002-Jenkins-CI-CD-with-Docker', url: 'https://github.com/Oswald-OSEI/DevOps'
             }
         }
-
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                // Build the project
-                sh 'mvn clean package'
+                script {
+                    docker.build('hospital_management:latest')
+                }
             }
         }
-
-        stage('Deploy') {
+        stage('Run Docker Container') {
             steps {
-                // Deploy the application (replace this with your actual deployment command)
-                sh 'java -jar target/springdata.jar'
+                script {
+                    docker.image('hospital_management:latest').run('-d -p 8080:8080')
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Cleanup unused containers and images
+                sh 'docker system prune -f'
             }
         }
     }
