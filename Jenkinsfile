@@ -21,12 +21,4 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            script {
-                // Cleanup unused containers and images
-                sh 'docker system prune -f'
-            }
-        }
-    }
 }
